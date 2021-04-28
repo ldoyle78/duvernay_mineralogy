@@ -10,8 +10,16 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Duvernay Mineralogy
-In some areas it is postulated [link](https://geoconvention.com/wp-content/uploads/abstracts/2019/GC2019_149_Mineralogical_controls_on_organic-hosted_pore_volume_and_pore_size-1.pdf) that higher Quartz & Feldspar content in the Duvernay leads to enhanced organic hosted porosity and permeability and thus increased production.  The followinf ternary plots compare the composition of the new well to known Duvernay producers in the area to make a prediction about production potential of the new well.
+In some areas it is postulated [link](https://geoconvention.com/wp-content/uploads/abstracts/2019/GC2019_149_Mineralogical_controls_on_organic-hosted_pore_volume_and_pore_size-1.pdf) that higher Quartz & Feldspar content in the Duvernay leads to enhanced organic hosted porosity and permeability and thus increased production.  The following ternary plots compare the composition of the new well to known Duvernay producers in the area to make a prediction about production potential of the new well.
 
+Well locations have been anonymized for confidentiality.
+
+### Assumptions
+1. High Quartz and Feldspar mineralogy is correlated to high porosity and permeability
+2. High porosity is correlated to higher production
+
+
+<span style="color:red">**ADD SECTION ON WHERE THE DATA CAME FROM**</span>
 
 ```{r getdata, warning = FALSE, message = FALSE}
 wells <- read.csv("./AllWells.csv")
@@ -20,7 +28,6 @@ library(ggtern)
 ```
 
 ## Normalizing Data
-Well locations have been anonymized for confidentiality
 
 ```{r normalizing}
 normal <- wells %>% mutate(nQtz.Fsp = round(QUARTZ.FSP/(QUARTZ.FSP + CARBONATE + TOTALCLAY)*100, 1), 
@@ -29,7 +36,7 @@ normal <- wells %>% mutate(nQtz.Fsp = round(QUARTZ.FSP/(QUARTZ.FSP + CARBONATE +
 ```
 
 ## Individual Wells
-Create ternary plots of Quartz.Feldspar vs Carbonate vs TotalClay content of successful Duvernay wells in the asset area
+Create ternary plots of Quartz.Feldspar vs Carbonate vs TotalClay content of new well and of successful Duvernay wells in the asset area.
 ```{r IndividualWells}
 
 ## Well1
@@ -73,12 +80,14 @@ PlotNewWell
 ```
 
 ## All wells
-Create a single ternary plot of successful Duvernay wells in the area along with the new well in order to directly compare Duvernay mineralogy.
+Create a single ternary plot of successful Duvernay wells in the area along with the new well in order to directly compare Duvernay mineralogy. It appears that the New Well has similar mineralogy to successful wells in the area and it can be predicted that IF mineralogy plays an important role in porosity and hence production that the New Well has a good chance of success.
 
 ```{r allwells}
 PlotAllWells <- ggtern(data = normal, aes(nClay, nQtz.Fsp, nCarb)) + geom_point(aes(color = Name), size = 2) + ggtitle("All Wells") + Tlab("Qtz.Fsp") + Llab("Tot.Clay") + Rlab("Carb.")
 PlotAllWells
 ```
 
+<span style="color:red">**FUTURE WORK**</span>
+Create a correlation matrix between the known producers and the new well.  Try and determine correlation between ultimate recovery and mineralogy. Also compare ultimate recovery with other variables (porosity, wellbore design, natural fractures, completions design).
 
 
